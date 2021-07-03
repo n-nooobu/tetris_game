@@ -43,5 +43,5 @@ class Block_Controller(object):
         print(nextMove)
         return nextMove
 
-BLOCK_CONTROLLER = Block_Controller()
+BLOCK_CONTROLLER_RANDOM = Block_Controller()
 

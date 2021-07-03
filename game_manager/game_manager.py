@@ -7,7 +7,8 @@ from PyQt5.QtCore import Qt, QBasicTimer, pyqtSignal
 from PyQt5.QtGui import QPainter, QColor
 
 from board_manager import BOARD_DATA, Shape
-from block_controller_random import BLOCK_CONTROLLER
+from block_controller import BLOCK_CONTROLLER
+from block_controller_random import BLOCK_CONTROLLER_RANDOM
 from block_controller_sample import BLOCK_CONTROLLER_SAMPLE
 
 from argparse import ArgumentParser
@@ -196,7 +197,7 @@ class Game_Manager(QMainWindow):
                 if self.use_sample == "y":
                     self.nextMove = BLOCK_CONTROLLER_SAMPLE.GetNextMove(nextMove, GameStatus)
                 else:
-                    self.nextMove = BLOCK_CONTROLLER.GetNextMove(nextMove, GameStatus)
+                    self.nextMove = BLOCK_CONTROLLER.GetNextMove(nextMove, GameStatus, BOARD_DATA)
 
                 if self.manual in ("y", "g"):
                     # ignore nextMove, for manual controll

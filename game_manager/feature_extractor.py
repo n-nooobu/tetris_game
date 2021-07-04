@@ -120,11 +120,11 @@ def get_max_well(BOARD_DATA):
     return np.max(get_wells(BOARD_DATA))
 
 
-def whether_can_put_I_in(BOARD_DATA):
+def whether_can_put_I_in(BOARD_DATA, col10_peak):
     backBoard2d = get_backBoard2d(BOARD_DATA)
     cnt = 0
     for x in range(BOARD_DATA.width):
-        for y in range(BOARD_DATA.height - 3):
+        for y in range(BOARD_DATA.height - (3 + int(col10_peak))):
             if backBoard2d[y, x]:
                 cnt += 1
                 break
@@ -168,7 +168,7 @@ print(get_wells(BOARD_DATA))
 print(get_max_well(BOARD_DATA))"""
 
 # Debug 2
-BOARD_DATA.backBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+"""BOARD_DATA.backBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -185,9 +185,9 @@ BOARD_DATA.backBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         1, 1, 0, 1, 0, 0, 0, 0, 0, 0,
                         1, 1, 0, 1, 0, 0, 0, 0, 1, 0,
-                        1, 1, 0, 1, 1, 0, 1, 1, 0, 1,
-                        1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
+                        1, 1, 0, 1, 1, 0, 1, 1, 0, 0,
+                        1, 1, 1, 1, 1, 1, 1, 0, 0, 1,
                         1, 0, 1, 1, 1, 1, 1, 0, 0, 0,
                         1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
                         1, 0, 1, 0, 1, 0, 1, 0, 0, 0]
-print(whether_can_put_I_in(BOARD_DATA))
+print(whether_can_put_I_in(BOARD_DATA, 0))"""

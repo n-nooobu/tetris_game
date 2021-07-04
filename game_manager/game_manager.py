@@ -197,7 +197,7 @@ class Game_Manager(QMainWindow):
                 if self.use_sample == "y":
                     self.nextMove = BLOCK_CONTROLLER_SAMPLE.GetNextMove(nextMove, GameStatus)
                 else:
-                    self.nextMove = BLOCK_CONTROLLER.GetNextMove(nextMove, GameStatus, BOARD_DATA)
+                    self.nextMove = BLOCK_CONTROLLER.GetNextMove(nextMove, GameStatus, BOARD_DATA)  # 変更
 
                 if self.manual in ("y", "g"):
                     # ignore nextMove, for manual controll

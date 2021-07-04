@@ -136,8 +136,8 @@ class Block_Controller(object):
         score = 0
         score -= sum_nholes * 10.0
         score -= bumpiness * 1.0
-        #score -= max_peak * 1
-        #score -= max_well * 1
+        score -= max_peak * 1
+        score -= max_well * 3
 
         return score
 

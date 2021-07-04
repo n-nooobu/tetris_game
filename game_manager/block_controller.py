@@ -19,7 +19,7 @@ class Block_Controller(object):
 
         # print GameStatus
         print("=================================================>")
-        pprint.pprint(GameStatus, width = 61, compact = True)
+        # pprint.pprint(GameStatus, width=61, compact=True)
 
         #  #                   ##             ##
         # ### -> (0, 1, 2, 3)   ## -> (0, 1)  ## -> (0)
@@ -48,18 +48,19 @@ class Block_Controller(object):
                 x0Min, x0Max = self.getSearchXRange(self.CurrentShape_class, direction0)
                 for x0 in range(x0Min, x0Max):
                     self.BOARD_DATA_tmp = self.getBoard(self.BOARD_DATA, self.CurrentShape_class, direction0, x0)
-                    # print(get_backBoard2d(self.BOARD_DATA_tmp))
+                    #print(get_backBoard2d(self.BOARD_DATA_tmp))
 
-                    """for direction1 in NextShapeDirectionRange:
+                    for direction1 in NextShapeDirectionRange:
                         x1Min, x1Max = self.getSearchXRange(self.NextShape_class, direction1)
                         for x1 in range(x1Min, x1Max):
-                            self.BOARD_DATA_tmp = self.getBoard(self.BOARD_DATA_tmp, self.NextShape_class, direction1, x1)"""
+                            self.BOARD_DATA_tmp2 = self.getBoard(self.BOARD_DATA_tmp, self.NextShape_class, direction1, x1)
+                            # print(get_backBoard2d(self.BOARD_DATA_tmp2))
 
-                    EvalValue = self.calcEvaluationValue(self.BOARD_DATA_tmp)
-                    # print(EvalValue)
-                    if EvalValue > LatestEvalValue:
-                        strategy = (direction0, x0, 1, 1)
-                        LatestEvalValue = EvalValue
+                            EvalValue = self.calcEvaluationValue(self.BOARD_DATA_tmp2)
+                            #print(EvalValue)
+                            if EvalValue > LatestEvalValue:
+                                strategy = (direction0, x0, 1, 1)
+                                LatestEvalValue = EvalValue
 
         # return nextMove
         print("===", datetime.now() - t1)
@@ -139,13 +140,16 @@ class Block_Controller(object):
         bumpiness = get_bumpiness(BOARD_DATA)
         max_peak = get_max_peak(BOARD_DATA)
         max_well = get_max_well(BOARD_DATA)
+        max_well2 = get_max_well2(BOARD_DATA)
+        #print('hole: ', sum_nholes, ', bump: ', bumpiness, 'mpeak: ', max_peak, 'mwell: ', max_well, 'mwell2: ', max_well2)
 
         score = 0
-        score -= sum_nholes * 50.0
-        score -= bumpiness * 1.0
-        score -= max_peak * 1
-        if max_well >= 3:
-            score -= max_well * 5
+        score -= sum_nholes * 50
+        score -= bumpiness * 1
+        score -= max_peak * 5
+        score -= max_well * 5
+        if max_well2 >= 3:
+            score -= max_well2 * 20
 
         return score
 
@@ -153,42 +157,93 @@ class Block_Controller(object):
 BLOCK_CONTROLLER = Block_Controller()
 
 """
+Currentのみ
 score = 0
 score -= sum_nholes * 10.0
 score -= bumpiness * 1.0
 score -= max_peak * 1
 score -= max_well * 3
+    
+    ランダムじゃない
+    ##### YOUR_RESULT #####
+    score:18382,line:57,gameover:1,time[s]:180.005
+    
+    ##### SCORE DETAIL #####
+      1 line: 100 * 4 = 400
+      2 line: 300 * 2 = 600
+      3 line: 700 * 3 = 2100
+      4 line: 1300 * 10 = 13000
+      dropdownscore: 2782
+      gameover: : -500 * 1 = -500
+    ##### ###### #####
 
-##### YOUR_RESULT #####
-score:18382,line:57,gameover:1,time[s]:180.005
 
-##### SCORE DETAIL #####
-  1 line: 100 * 4 = 400
-  2 line: 300 * 2 = 600
-  3 line: 700 * 3 = 2100
-  4 line: 1300 * 10 = 13000
-  dropdownscore: 2782
-  gameover: : -500 * 1 = -500
-##### ###### #####
-
-
-
+Currentのみ
 score = 0
-        score -= sum_nholes * 50.0
-        score -= bumpiness * 1.0
-        score -= max_peak * 1
-        if max_well >= 3:
-            score -= max_well * 5
+score -= sum_nholes * 50.0
+score -= bumpiness * 1.0
+score -= max_peak * 1
+if max_well >= 3:
+    score -= max_well * 5
+    
+    ランダムじゃない
+    ##### YOUR_RESULT #####
+    score:19032,line:56,gameover:1,time[s]:180.357
+    
+    ##### SCORE DETAIL #####
+      1 line: 100 * 1 = 100
+      2 line: 300 * 1 = 300
+      3 line: 700 * 3 = 2100
+      4 line: 1300 * 11 = 14300
+      dropdownscore: 2732
+      gameover: : -500 * 1 = -500
+    ##### ###### #####
 
-##### YOUR_RESULT #####
-score:19032,line:56,gameover:1,time[s]:180.357
 
-##### SCORE DETAIL #####
-  1 line: 100 * 1 = 100
-  2 line: 300 * 1 = 300
-  3 line: 700 * 3 = 2100
-  4 line: 1300 * 11 = 14300
-  dropdownscore: 2732
-  gameover: : -500 * 1 = -500
-##### ###### #####
+CurrentとNext
+score = 0
+score -= sum_nholes * 50
+score -= bumpiness * 1
+if max_well2 >= 3:
+    score -= max_well2 * 20
+    
+    ランダムじゃない
+    ##### YOUR_RESULT #####
+    score:22158,line:65,gameover:0,time[s]:180.306
+    
+    ##### SCORE DETAIL #####
+      1 line: 100 * 1 = 100
+      2 line: 300 * 0 = 0
+      3 line: 700 * 4 = 2800
+      4 line: 1300 * 13 = 16900
+      dropdownscore: 2358
+      gameover: : -500 * 0 = 0
+    ##### ###### #####
+    
+    ランダム
+    ##### YOUR_RESULT #####
+    score:12557,line:36,gameover:2,time[s]:180.893
+    
+    ##### SCORE DETAIL #####
+      1 line: 100 * 1 = 100
+      2 line: 300 * 0 = 0
+      3 line: 700 * 1 = 700
+      4 line: 1300 * 8 = 10400
+      dropdownscore: 2357
+      gameover: : -500 * 2 = -1000
+    ##### ###### #####
+    
+    ランダム
+    ##### YOUR_RESULT #####
+    score:17048,line:49,gameover:1,time[s]:180.475
+    
+    ##### SCORE DETAIL #####
+      1 line: 100 * 0 = 0
+      2 line: 300 * 0 = 0
+      3 line: 700 * 3 = 2100
+      4 line: 1300 * 10 = 13000
+      dropdownscore: 2448
+      gameover: : -500 * 1 = -500
+    ##### ###### #####
+
 """

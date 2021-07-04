@@ -14,7 +14,7 @@ def get_backBoard1d(backBoard2d):
     return list(backBoard1d)
 
 
-def get_peaks_per_col(BOARD_DATA):
+"""def get_peaks_per_col(BOARD_DATA):
     backBoard2d = get_backBoard2d(BOARD_DATA)
     peaks = np.array([])
     for col in range(backBoard2d.shape[1]):
@@ -23,6 +23,17 @@ def get_peaks_per_col(BOARD_DATA):
             peaks = np.append(peaks, p)
         else:
             peaks = np.append(peaks, 0)
+    return peaks"""
+
+
+def get_peaks_per_col(BOARD_DATA):
+    backBoard2d = get_backBoard2d(BOARD_DATA)
+    peaks = np.zeros(backBoard2d.shape[1], dtype=int)
+    for col in range(backBoard2d.shape[1]):
+        for row in range(backBoard2d.shape[0]):
+            if backBoard2d[row, col]:
+                peaks[col] = backBoard2d.shape[0] - row
+                break
     return peaks
 
 
@@ -37,9 +48,10 @@ def get_sum_peaks(BOARD_DATA):
 def get_nholes_per_col(BOARD_DATA):
     # Count from peaks to bottom
     backBoard2d = get_backBoard2d(BOARD_DATA)
+    peaks = get_peaks_per_col(BOARD_DATA)
     holes = []
     for col in range(BOARD_DATA.width):
-        start = -get_peaks_per_col(BOARD_DATA)[col]
+        start = -peaks[col]
         # If there's no holes i.e. no blocks on that column
         if start == 0:
             holes.append(0)
@@ -120,6 +132,28 @@ def get_max_well(BOARD_DATA):
     return np.max(get_wells(BOARD_DATA))
 
 
+def get_wells2(BOARD_DATA):
+    peaks = get_peaks_per_col(BOARD_DATA)
+    wells = []
+    for col in range(BOARD_DATA.width):
+        if col == 0:
+            pre_peak = BOARD_DATA.height
+        else:
+            pre_peak = peaks[col - 1]
+        now_peak = peaks[col]
+        if col == BOARD_DATA.width - 1:
+            nxt_peak = BOARD_DATA.height
+        else:
+            nxt_peak = peaks[col + 1]
+        w = min(max(pre_peak - now_peak, 0), max(nxt_peak - now_peak, 0))
+        wells.append(w)
+    return wells
+
+
+def get_max_well2(BOARD_DATA):
+    return np.max(get_wells2(BOARD_DATA))
+
+
 def whether_can_put_I_in(BOARD_DATA, col10_peak):
     backBoard2d = get_backBoard2d(BOARD_DATA)
     cnt = 0
@@ -168,7 +202,7 @@ print(get_wells(BOARD_DATA))
 print(get_max_well(BOARD_DATA))"""
 
 # Debug 2
-"""BOARD_DATA.backBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+"""-BOARD_DATA.backBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

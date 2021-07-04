@@ -30,6 +30,8 @@ class Block_Controller(object):
         self.NextShape_class = GameStatus["block_info"]["nextShape"]["class"]
         # 0
         self.ShapeNone_index = GameStatus["debug_info"]["shape_info"]["shapeNone"]["index"]
+        # 10列目のpeak
+        col10_peak = get_peaks_per_col(BOARD_DATA)[BOARD_DATA.width - 1]
         # 9列のBOARD_DATA
         self.BOARD_DATA = copy.deepcopy(BOARD_DATA)
         backBoard2d = get_backBoard2d(self.BOARD_DATA)
@@ -37,7 +39,7 @@ class Block_Controller(object):
         self.BOARD_DATA.backBoard = get_backBoard1d(backBoard2d_9cols)
         self.BOARD_DATA.width -= 1
 
-        if self.CurrentShape_class.shape == 1 and whether_can_put_I_in(self.BOARD_DATA):
+        if self.CurrentShape_class.shape == 1 and whether_can_put_I_in(self.BOARD_DATA, col10_peak):
             strategy = (0, BOARD_DATA.width, 1, 1)
         else:
             LatestEvalValue = -100000
@@ -47,6 +49,11 @@ class Block_Controller(object):
                 for x0 in range(x0Min, x0Max):
                     self.BOARD_DATA_tmp = self.getBoard(self.BOARD_DATA, self.CurrentShape_class, direction0, x0)
                     # print(get_backBoard2d(self.BOARD_DATA_tmp))
+
+                    """for direction1 in NextShapeDirectionRange:
+                        x1Min, x1Max = self.getSearchXRange(self.NextShape_class, direction1)
+                        for x1 in range(x1Min, x1Max):
+                            self.BOARD_DATA_tmp = self.getBoard(self.BOARD_DATA_tmp, self.NextShape_class, direction1, x1)"""
 
                     EvalValue = self.calcEvaluationValue(self.BOARD_DATA_tmp)
                     # print(EvalValue)
@@ -134,13 +141,54 @@ class Block_Controller(object):
         max_well = get_max_well(BOARD_DATA)
 
         score = 0
-        score -= sum_nholes * 10.0
+        score -= sum_nholes * 50.0
         score -= bumpiness * 1.0
         score -= max_peak * 1
-        score -= max_well * 3
+        if max_well >= 3:
+            score -= max_well * 5
 
         return score
 
 
 BLOCK_CONTROLLER = Block_Controller()
 
+"""
+score = 0
+score -= sum_nholes * 10.0
+score -= bumpiness * 1.0
+score -= max_peak * 1
+score -= max_well * 3
+
+##### YOUR_RESULT #####
+score:18382,line:57,gameover:1,time[s]:180.005
+
+##### SCORE DETAIL #####
+  1 line: 100 * 4 = 400
+  2 line: 300 * 2 = 600
+  3 line: 700 * 3 = 2100
+  4 line: 1300 * 10 = 13000
+  dropdownscore: 2782
+  gameover: : -500 * 1 = -500
+##### ###### #####
+
+
+
+score = 0
+        score -= sum_nholes * 50.0
+        score -= bumpiness * 1.0
+        score -= max_peak * 1
+        if max_well >= 3:
+            score -= max_well * 5
+
+##### YOUR_RESULT #####
+score:19032,line:56,gameover:1,time[s]:180.357
+
+##### SCORE DETAIL #####
+  1 line: 100 * 1 = 100
+  2 line: 300 * 1 = 300
+  3 line: 700 * 3 = 2100
+  4 line: 1300 * 11 = 14300
+  dropdownscore: 2732
+  gameover: : -500 * 1 = -500
+##### ###### #####
+"""

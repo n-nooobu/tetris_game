@@ -14,18 +14,6 @@ def get_backBoard1d(backBoard2d):
     return list(backBoard1d)
 
 
-"""def get_peaks_per_col(BOARD_DATA):
-    backBoard2d = get_backBoard2d(BOARD_DATA)
-    peaks = np.array([])
-    for col in range(backBoard2d.shape[1]):
-        if 1 in backBoard2d[:, col]:
-            p = backBoard2d.shape[0] - np.argmax(backBoard2d[:, col], axis=0)
-            peaks = np.append(peaks, p)
-        else:
-            peaks = np.append(peaks, 0)
-    return peaks"""
-
-
 def get_peaks_per_col(backboard, width):
     backBoard2d = get_backBoard2d(backboard, width)
     peaks = np.zeros(backBoard2d.shape[1], dtype=int)
@@ -204,26 +192,28 @@ print(get_wells(backboard, width))
 print(get_max_well(backboard, width))"""
 
 # Debug 2
-"""-BOARD_DATA.backBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        1, 1, 0, 1, 0, 0, 0, 0, 0, 0,
-                        1, 1, 0, 1, 0, 0, 0, 0, 1, 0,
-                        1, 1, 0, 1, 1, 0, 1, 1, 0, 0,
-                        1, 1, 1, 1, 1, 1, 1, 0, 0, 1,
-                        1, 0, 1, 1, 1, 1, 1, 0, 0, 0,
-                        1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
-                        1, 0, 1, 0, 1, 0, 1, 0, 0, 0]
-print(whether_can_put_I_in(BOARD_DATA, 0))"""
+"""backboard = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             1, 1, 0, 1, 0, 0, 0, 0, 0, 0,
+             1, 1, 0, 1, 0, 0, 0, 0, 1, 0,
+             1, 1, 0, 1, 1, 0, 1, 1, 0, 0,
+             1, 1, 1, 1, 1, 1, 1, 0, 0, 1,
+             1, 0, 1, 1, 1, 1, 1, 0, 0, 0,
+             1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
+             1, 0, 1, 0, 1, 0, 1, 0, 0, 0]
+width = 10
+height = 22
+print(whether_can_put_I_in(backboard, width, height, 3))"""

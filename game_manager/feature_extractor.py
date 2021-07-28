@@ -1,7 +1,5 @@
 import numpy as np
 
-from board_manager import BOARD_DATA
-
 
 def get_backBoard2d(backboard, width):  #
     backBoard2d = np.array(backboard).reshape(-1, width)

@@ -49,16 +49,13 @@ class Block_Controller(object):
                 x0Min, x0Max = self.getSearchXRange(width_9cols, self.CurrentShape_class, direction0)
                 for x0 in range(x0Min, x0Max):
                     self.backboard_tmp = self.getBoard(self.backboard, width_9cols, height, self.CurrentShape_class, direction0, x0)
-                    #print(get_backBoard2d(self.BOARD_DATA_tmp))
 
                     for direction1 in NextShapeDirectionRange:
                         x1Min, x1Max = self.getSearchXRange(width_9cols, self.NextShape_class, direction1)
                         for x1 in range(x1Min, x1Max):
                             self.backboard_tmp2 = self.getBoard(self.backboard_tmp, width_9cols, height, self.NextShape_class, direction1, x1)
-                            # print(get_backBoard2d(self.BOARD_DATA_tmp2))
 
                             EvalValue = self.calcEvaluationValue(self.backboard_tmp2, width_9cols, height)
-                            #print(EvalValue)
                             if EvalValue > LatestEvalValue:
                                 strategy = (direction0, x0, 1, 1)
                                 LatestEvalValue = EvalValue

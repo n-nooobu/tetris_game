@@ -3,8 +3,8 @@ import numpy as np
 from board_manager import BOARD_DATA
 
 
-def get_backBoard2d(BOARD_DATA):  #
-    backBoard2d = np.array(BOARD_DATA.backBoard).reshape(-1, BOARD_DATA.width)
+def get_backBoard2d(backboard, width):  #
+    backBoard2d = np.array(backboard).reshape(-1, width)
     backBoard2d = np.where(backBoard2d > 0, 1, 0)
     return backBoard2d
 
@@ -26,8 +26,8 @@ def get_backBoard1d(backBoard2d):
     return peaks"""
 
 
-def get_peaks_per_col(BOARD_DATA):
-    backBoard2d = get_backBoard2d(BOARD_DATA)
+def get_peaks_per_col(backboard, width):
+    backBoard2d = get_backBoard2d(backboard, width)
     peaks = np.zeros(backBoard2d.shape[1], dtype=int)
     for col in range(backBoard2d.shape[1]):
         for row in range(backBoard2d.shape[0]):
@@ -37,20 +37,20 @@ def get_peaks_per_col(BOARD_DATA):
     return peaks
 
 
-def get_max_peak(BOARD_DATA):
-    return np.max(get_peaks_per_col(BOARD_DATA))
+def get_max_peak(backboard, width):
+    return np.max(get_peaks_per_col(backboard, width))
 
 
-def get_sum_peaks(BOARD_DATA):
-    return np.sum(get_peaks_per_col(BOARD_DATA))
+def get_sum_peaks(backboard, width):
+    return np.sum(get_peaks_per_col(backboard, width))
 
 
-def get_nholes_per_col(BOARD_DATA):
+def get_nholes_per_col(backboard, width):
     # Count from peaks to bottom
-    backBoard2d = get_backBoard2d(BOARD_DATA)
-    peaks = get_peaks_per_col(BOARD_DATA)
+    backBoard2d = get_backBoard2d(backboard, width)
+    peaks = get_peaks_per_col(backboard, width)
     holes = []
-    for col in range(BOARD_DATA.width):
+    for col in range(width):
         start = -peaks[col]
         # If there's no holes i.e. no blocks on that column
         if start == 0:
@@ -60,17 +60,17 @@ def get_nholes_per_col(BOARD_DATA):
     return holes
 
 
-def get_sum_nholes(BOARD_DATA):
-    return np.sum(get_nholes_per_col(BOARD_DATA))
+def get_sum_nholes(backboard, width):
+    return np.sum(get_nholes_per_col(backboard, width))
 
 
-def get_ncols_with_hole(BOARD_DATA):
-    return np.count_nonzero(np.array(get_nholes_per_col(BOARD_DATA)) > 0)
+def get_ncols_with_hole(backboard, width):
+    return np.count_nonzero(np.array(get_nholes_per_col(backboard, width)) > 0)
 
 
-def get_row_transition(BOARD_DATA):
-    backBoard2d = get_backBoard2d(BOARD_DATA)
-    max_peak = get_max_peak(BOARD_DATA)
+def get_row_transition(backboard, width):
+    backBoard2d = get_backBoard2d(backboard, width)
+    max_peak = get_max_peak(backboard, width)
     sum = 0
     # From highest peak to bottom
     for row in range(int(backBoard2d.shape[0] - max_peak), backBoard2d.shape[0]):
@@ -80,9 +80,9 @@ def get_row_transition(BOARD_DATA):
     return sum
 
 
-def get_col_transition(BOARD_DATA):
-    backBoard2d = get_backBoard2d(BOARD_DATA)
-    peaks = get_peaks_per_col(BOARD_DATA)
+def get_col_transition(backboard, width):
+    backBoard2d = get_backBoard2d(backboard, width)
+    peaks = get_peaks_per_col(backboard, width)
     sum = 0
     for col in range(backBoard2d.shape[1]):
         if peaks[col] <= 1:
@@ -93,21 +93,21 @@ def get_col_transition(BOARD_DATA):
     return sum
 
 
-def get_bumpiness(BOARD_DATA):
-    peaks = get_peaks_per_col(BOARD_DATA)
+def get_bumpiness(backboard, width):
+    peaks = get_peaks_per_col(backboard, width)
     s = 0
-    for i in range(BOARD_DATA.width - 1):
+    for i in range(width - 1):
         s += np.abs(peaks[i] - peaks[i + 1])
     return s
 
 
-def get_num_pits(BOARD_DATA):
-    backBoard2d = get_backBoard2d(BOARD_DATA)
+def get_num_pits(backboard, width):
+    backBoard2d = get_backBoard2d(backboard, width)
     return np.count_nonzero(np.count_nonzero(backBoard2d, axis=0) == 0)
 
 
-def get_wells(BOARD_DATA):
-    peaks = get_peaks_per_col(BOARD_DATA)
+def get_wells(backboard, width):
+    peaks = get_peaks_per_col(backboard, width)
     wells = []
     for i in range(len(peaks)):
         if i == 0:
@@ -128,21 +128,21 @@ def get_wells(BOARD_DATA):
     return wells
 
 
-def get_max_well(BOARD_DATA):
-    return np.max(get_wells(BOARD_DATA))
+def get_max_well(backboard, width):
+    return np.max(get_wells(backboard, width))
 
 
-def get_wells2(BOARD_DATA):
-    peaks = get_peaks_per_col(BOARD_DATA)
+def get_wells2(backboard, width, height):
+    peaks = get_peaks_per_col(backboard, width)
     wells = []
-    for col in range(BOARD_DATA.width):
+    for col in range(width):
         if col == 0:
-            pre_peak = BOARD_DATA.height
+            pre_peak = height
         else:
             pre_peak = peaks[col - 1]
         now_peak = peaks[col]
-        if col == BOARD_DATA.width - 1:
-            nxt_peak = BOARD_DATA.height
+        if col == width - 1:
+            nxt_peak = height
         else:
             nxt_peak = peaks[col + 1]
         w = min(max(pre_peak - now_peak, 0), max(nxt_peak - now_peak, 0))
@@ -150,56 +150,58 @@ def get_wells2(BOARD_DATA):
     return wells
 
 
-def get_max_well2(BOARD_DATA):
-    return np.max(get_wells2(BOARD_DATA))
+def get_max_well2(backboard, width, height):
+    return np.max(get_wells2(backboard, width, height))
 
 
-def whether_can_put_I_in(BOARD_DATA, col10_peak):
-    backBoard2d = get_backBoard2d(BOARD_DATA)
+def whether_can_put_I_in(backboard, width, height, col10_peak):
+    backBoard2d = get_backBoard2d(backboard, width)
     cnt = 0
-    for x in range(BOARD_DATA.width):
-        for y in range(BOARD_DATA.height - (3 + int(col10_peak))):
+    for x in range(width):
+        for y in range(height - (3 + int(col10_peak))):
             if backBoard2d[y, x]:
                 cnt += 1
                 break
-    return cnt == BOARD_DATA.width
+    return cnt == width
 
 
 # Debug 1
-"""BOARD_DATA.backBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        1, 1, 0, 1, 0, 0, 0, 0, 0, 0,
-                        1, 1, 0, 1, 0, 0, 0, 0, 0, 0,
-                        1, 1, 0, 1, 1, 0, 1, 0, 0, 0,
-                        1, 1, 1, 1, 1, 0, 1, 0, 0, 0,
-                        1, 0, 1, 1, 1, 1, 1, 0, 0, 0,
-                        1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
-                        1, 0, 1, 0, 1, 0, 1, 0, 0, 0]
-print(get_peaks_per_col(BOARD_DATA))
-print(get_max_peak(BOARD_DATA))
-print(get_sum_peaks(BOARD_DATA))
-print(get_nholes_per_col(BOARD_DATA))
-print(get_sum_nholes(BOARD_DATA))
-print(get_ncols_with_hole(BOARD_DATA))
-print(get_row_transition(BOARD_DATA))
-print(get_col_transition(BOARD_DATA))
-print(get_bumpiness(BOARD_DATA))
-print(get_num_pits(BOARD_DATA))
-print(get_wells(BOARD_DATA))
-print(get_max_well(BOARD_DATA))"""
+"""backboard = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             1, 1, 0, 1, 0, 0, 0, 0, 0, 0,
+             1, 1, 0, 1, 0, 0, 0, 0, 0, 0,
+             1, 1, 0, 1, 1, 0, 1, 0, 0, 0,
+             1, 1, 1, 1, 1, 0, 1, 0, 0, 0,
+             1, 0, 1, 1, 1, 1, 1, 0, 0, 0,
+             1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
+             1, 0, 1, 0, 1, 0, 1, 0, 0, 0]
+width = 10
+height = 22
+print(get_peaks_per_col(backboard, width))
+print(get_max_peak(backboard, width))
+print(get_sum_peaks(backboard, width))
+print(get_nholes_per_col(backboard, width))
+print(get_sum_nholes(backboard, width))
+print(get_ncols_with_hole(backboard, width))
+print(get_row_transition(backboard, width))
+print(get_col_transition(backboard, width))
+print(get_bumpiness(backboard, width))
+print(get_num_pits(backboard, width))
+print(get_wells(backboard, width))
+print(get_max_well(backboard, width))"""
 
 # Debug 2
 """-BOARD_DATA.backBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

@@ -50,15 +50,21 @@ class Block_Controller(object):
                 for x0 in range(x0Min, x0Max):
                     self.backboard_tmp = self.getBoard(self.backboard, width_9cols, height, self.CurrentShape_class, direction0, x0)
 
-                    for direction1 in NextShapeDirectionRange:
-                        x1Min, x1Max = self.getSearchXRange(width_9cols, self.NextShape_class, direction1)
-                        for x1 in range(x1Min, x1Max):
-                            self.backboard_tmp2 = self.getBoard(self.backboard_tmp, width_9cols, height, self.NextShape_class, direction1, x1)
+                    if self.NextShape_class.shape == 1 and whether_can_put_I_in(self.backboard_tmp, width_9cols, height, col10_peak):
+                        EvalValue = self.calcEvaluationValue(self.backboard_tmp, width_9cols, height)
+                        if EvalValue > LatestEvalValue:
+                            strategy = (direction0, x0, 1, 1)
+                            LatestEvalValue = EvalValue
+                    else:
+                        for direction1 in NextShapeDirectionRange:
+                            x1Min, x1Max = self.getSearchXRange(width_9cols, self.NextShape_class, direction1)
+                            for x1 in range(x1Min, x1Max):
+                                self.backboard_tmp2 = self.getBoard(self.backboard_tmp, width_9cols, height, self.NextShape_class, direction1, x1)
 
-                            EvalValue = self.calcEvaluationValue(self.backboard_tmp2, width_9cols, height)
-                            if EvalValue > LatestEvalValue:
-                                strategy = (direction0, x0, 1, 1)
-                                LatestEvalValue = EvalValue
+                                EvalValue = self.calcEvaluationValue(self.backboard_tmp2, width_9cols, height)
+                                if EvalValue > LatestEvalValue:
+                                    strategy = (direction0, x0, 1, 1)
+                                    LatestEvalValue = EvalValue
 
         # return nextMove
         print("===", datetime.now() - t1)
@@ -137,15 +143,21 @@ class Block_Controller(object):
         row_transition = get_row_transition(backboard, width)
         bumpiness = get_bumpiness(backboard, width)
         max_peak = get_max_peak(backboard, width)
-        max_well2 = get_max_well2(backboard, width, height)
+        max_well = get_max_well(backboard, width)
+        wells2 = get_wells2(backboard, width, height)
 
         score = 0
         score -= sum_nholes * 100
-        score -= row_transition * 1
+        score -= row_transition * 0.1
         score -= bumpiness * 1
-        score -= max_peak * 10
-        if max_well2 >= 3:
-            score -= max_well2 * 20
+        score -= max_peak * 30
+        score -= max_well * 10
+        for i, w in enumerate(wells2):
+            if w >= 3:
+                score -= w * 50
+            else:
+                if i == 0 or i == len(wells2) - 1:
+                    score -= w * 30
 
         return score
 

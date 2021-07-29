@@ -143,6 +143,7 @@ class Block_Controller(object):
         row_transition = get_row_transition(backboard, width)
         bumpiness = get_bumpiness(backboard, width)
         max_peak = get_max_peak(backboard, width)
+        peak_difference = get_peak_difference(backboard, width)
         max_well = get_max_well(backboard, width)
         wells2 = get_wells2(backboard, width, height)
 
@@ -150,7 +151,7 @@ class Block_Controller(object):
         score -= sum_nholes * 100
         score -= row_transition * 0.1
         score -= bumpiness * 1
-        score -= max_peak * 30
+        score -= peak_difference * 30
         score -= max_well * 10
         for i, w in enumerate(wells2):
             if w >= 3:

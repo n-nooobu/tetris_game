@@ -27,6 +27,15 @@ def get_max_peak(backboard, width):
     return np.max(get_peaks_per_col(backboard, width))
 
 
+def get_min_peak(backboard, width):
+    return np.min(get_peaks_per_col(backboard, width))
+
+
+def get_min_peak3(backboard, width):
+    peaks_per_col = sorted(get_peaks_per_col(backboard, width))
+    return peaks_per_col[:3]
+
+
 def get_peak_difference(backboard, width):
     peaks_per_col = get_peaks_per_col(backboard, width)
     return np.max(peaks_per_col) - np.min(peaks_per_col)
